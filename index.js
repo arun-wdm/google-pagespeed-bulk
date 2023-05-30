@@ -14,7 +14,7 @@ const folder = 'results'; // Name of folder for output
 const fullJson = true; // Variable for testing purposes. Extracts full API response into JSON File
 const chunkNum = 10; // Number or URLs per batch
 const numTest = 1; // Number of Lab test to run (Lighthouse)
-const device = 'mobile'; // Test viewport. 'desktop' also available
+const device = 'mobile'; // Test viewport. 'mobile', desktop' available
 
 ////* Start of script *////
 console.time();
@@ -135,6 +135,7 @@ const getSpeedData = async (testNum = 1) => {
 
           // Extract Lab metrics
           const testUrl = res.value.lighthouseResult.finalUrl;
+          const performanceScore = res.value.lighthouseResult.categories.performance.score * 100;
           const TTFB = labAudit['server-response-time'].numericValue;
           const TTI =
             labAudit.metrics.details?.items[0].interactive ?? 'no data';
@@ -161,6 +162,7 @@ const getSpeedData = async (testNum = 1) => {
           // Construct object
           const finalObj = {
             testUrl,
+            performanceScore,
             TTFB,
             labFCP,
             labLCP,
@@ -214,7 +216,7 @@ const getSpeedData = async (testNum = 1) => {
   const labDataResFilter = labDataRes.filter((obj) => obj !== undefined);
   // Write lab data results into CSV
   console.log('Writing lab data...');
-  writeFile(`./${folder}/results-test.csv`, parse(labDataResFilter)).catch(
+  writeFile(`./${folder}/results-test-${device}.csv`, parse(labDataResFilter)).catch(
     (err) => console.log(`Error writing Lab JSON file:${err}`)
   );
 
