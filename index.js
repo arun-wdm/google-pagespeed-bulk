@@ -56,9 +56,10 @@ const getSpeedData = async (testNum = 1) => {
       console.log(`Testing round #${round + 1} of chunk #${i + 1}`);
 
       // Loop trough array to create batch of promises (array)
-      const promises = chunk.map((testUrl) => apiRequest(testUrl, device));
-
+      const promisesMobile = chunk.map((testUrl) => apiRequest(testUrl, 'mobile'));
+      const promisesDesktop = chunk.map((testUrl) => apiRequest(testUrl, 'desktop'));
       // Send all requests in parallel
+      const promises = promisesMobile.concat(promisesDesktop);
       const rawBatchResults = await Promise.allSettled(promises);
 
       // Iterate through API responses
@@ -135,6 +136,7 @@ const getSpeedData = async (testNum = 1) => {
 
           // Extract Lab metrics
           const testUrl = res.value.lighthouseResult.finalUrl;
+          const device = res.value.lighthouseResult.configSettings.formFactor;
           const performanceScore = res.value.lighthouseResult.categories.performance.score * 100;
           const TTFB = labAudit['server-response-time'].numericValue;
           const TTI =
@@ -162,6 +164,7 @@ const getSpeedData = async (testNum = 1) => {
           // Construct object
           const finalObj = {
             testUrl,
+            device,
             performanceScore,
             TTFB,
             labFCP,
@@ -216,7 +219,7 @@ const getSpeedData = async (testNum = 1) => {
   const labDataResFilter = labDataRes.filter((obj) => obj !== undefined);
   // Write lab data results into CSV
   console.log('Writing lab data...');
-  writeFile(`./${folder}/results-test-${device}.csv`, parse(labDataResFilter)).catch(
+  writeFile(`./${folder}/results-test.csv`, parse(labDataResFilter)).catch(
     (err) => console.log(`Error writing Lab JSON file:${err}`)
   );
 
