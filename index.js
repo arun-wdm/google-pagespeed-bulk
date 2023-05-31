@@ -110,12 +110,12 @@ const getSpeedData = async (testNum = 1) => {
 
                 // Otherwise Extract Origin Field metrics (if there are)
                 const fieldFCP =
-                  fieldMetrics.FIRST_CONTENTFUL_PAINT_MS.percentile;
-                const fieldFID = fieldMetrics.FIRST_INPUT_DELAY_MS.percentile;
+                  fieldMetrics.FIRST_CONTENTFUL_PAINT_MS ? fieldMetrics.FIRST_CONTENTFUL_PAINT_MS.percentile : 'no data';
+                const fieldFID = fieldMetrics.FIRST_INPUT_DELAY_MS ? fieldMetrics.FIRST_INPUT_DELAY_MS.percentile : 'no data';
                 const fieldLCP =
-                  fieldMetrics.LARGEST_CONTENTFUL_PAINT_MS.percentile;
+                  fieldMetrics.LARGEST_CONTENTFUL_PAINT_MS ? fieldMetrics.LARGEST_CONTENTFUL_PAINT_MS.percentile : 'no data';
                 const fieldCLS =
-                  fieldMetrics.CUMULATIVE_LAYOUT_SHIFT_SCORE.percentile;
+                  fieldMetrics.CUMULATIVE_LAYOUT_SHIFT_SCORE ? fieldMetrics.CUMULATIVE_LAYOUT_SHIFT_SCORE.percentile : 'no data';
 
                 // Construct fieldResult object
                 const fieldResObj = {
