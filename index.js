@@ -11,10 +11,11 @@ import { median } from './median-math.js';
 /* Variables */
 const file = 'urls.csv'; // File name for list of URLs to check
 const folder = 'results'; // Name of folder for output
-const fullJson = true; // Variable for testing purposes. Extracts full API response into JSON File
-const chunkNum = 10; // Number or URLs per batch
+const fullJson = false; // Variable for testing purposes. Extracts full API response into JSON File
+const chunkNum = 5; // Number or URLs per batch
 const numTest = 1; // Number of Lab test to run (Lighthouse)
-const device = 'mobile'; // Test viewport. 'mobile', desktop' available
+const status = 'Staging - Before'; // Status text to accompany the test result for comparision (Live - Before, Live - After, Staging - Before, Staging - After)
+//const device = 'mobile'; // Test viewport. 'mobile', desktop' available
 
 ////* Start of script *////
 console.time();
@@ -136,6 +137,7 @@ const getSpeedData = async (testNum = 1) => {
 
           // Extract Lab metrics
           const testUrl = res.value.lighthouseResult.finalUrl;
+          const sNo = urlList.indexOf(testUrl) + 1;
           const device = res.value.lighthouseResult.configSettings.formFactor;
           const performanceScore = res.value.lighthouseResult.categories.performance.score * 100;
           const TTFB = labAudit['server-response-time'].numericValue;
@@ -163,7 +165,9 @@ const getSpeedData = async (testNum = 1) => {
 
           // Construct object
           const finalObj = {
+            sNo,
             testUrl,
+            status,
             device,
             performanceScore,
             TTFB,
