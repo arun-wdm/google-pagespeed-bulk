@@ -223,7 +223,7 @@ const getSpeedData = async (testNum = 1) => {
   const labDataResFilter = labDataRes.filter((obj) => obj !== undefined);
   // Write lab data results into CSV
   console.log('Writing lab data...');
-  writeFile(`./${folder}/results-test.csv`, parse(labDataResFilter)).catch(
+  writeFile(`./${folder}/results-test-${Date.now()}.csv`, parse(labDataResFilter)).catch(
     (err) => console.log(`Error writing Lab JSON file:${err}`)
   );
 
